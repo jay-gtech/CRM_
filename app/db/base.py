@@ -4,3 +4,4 @@ from app.models.lead import Lead  # noqa
 from app.models.contact import Contact  # noqa
 from app.models.deal import Deal  # noqa
 from app.models.activity import Activity  # noqa
+from app.models.meeting import Meeting, MeetingInsight  # noqa
