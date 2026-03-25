@@ -18,7 +18,10 @@ def create_access_token(subject: Union[str, Any], expires_delta: Optional[timede
     return encoded_jwt
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    return pwd_context.verify(plain_password, hashed_password)
+    # Truncate to 72 bytes before verification to match hashing logic
+    return pwd_context.verify(plain_password.encode("utf-8")[:72], hashed_password)
 
 def get_password_hash(password: str) -> str:
-    return pwd_context.hash(password)
+    # Bcrypt has a hard 72-byte limit for the input secret. 
+    # Encoding to UTF-8 and truncating ensures we never exceed this.
+    return pwd_context.hash(password.encode("utf-8")[:72])
