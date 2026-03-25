@@ -6,7 +6,7 @@ from fastapi.responses import RedirectResponse
 
 from app.core.config import settings
 from app.api.routes import auth, leads, contacts, deals, activities, ai
-from app.api.endpoints import meeting
+from app.api.endpoints import meeting, chatbot
 from app.api.deps import get_current_user
 
 app = FastAPI(title=settings.PROJECT_NAME)
@@ -25,6 +25,7 @@ app.include_router(deals.router)
 app.include_router(activities.router)
 app.include_router(ai.router)
 app.include_router(meeting.router)
+app.include_router(chatbot.router)
 
 from sqlalchemy.orm import Session
 from app.db.session import get_db
