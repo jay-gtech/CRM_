@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="flex justify-between items-center mb-6">
+    <h2 class="text-2xl font-bold text-gray-800">Deal Pipeline</h2>
+</div>
+
+<!-- Pipeline View -->
+<div class="flex space-x-4 overflow-x-auto pb-4">
+    {% for stage, deals in pipeline.items() %}
+    <!-- Stage Column -->
+    <div class="bg-gray-100 p-4 rounded-lg min-w-[300px] shadow-inner">
+        <h3 class="font-bold text-gray-700 uppercase tracking-wide mb-4 border-b-2 border-gray-300 pb-2">
+            {{ stage }} <span class="bg-gray-200 text-gray-600 text-xs px-2 py-1 rounded ml-2">{{ deals|length }}</span>
+        </h3>
+        
+        <div class="space-y-3">
+            {% for deal in deals %}
+            <!-- Deal Card -->
+            <div class="bg-white p-4 rounded shadow border-l-4 
+            {% if stage == 'Won' %} border-green-500
+            {% elif stage == 'Lost' %} border-red-500
+            {% else %} border-blue-500 {% endif %} relative">
+                <h4 class="font-bold text-gray-900 mb-1">{{ deal.name }}</h4>
+                <p class="text-sm font-semibold text-green-600 mb-3">${{ "{:,.2f}".format(deal.amount) }}</p>
+                
+                <form action="/deals/move/{{ deal.id }}" method="POST">
+                    <select name="stage" onchange="this.form.submit()" class="text-xs border rounded px-2 py-1 bg-gray-50 text-gray-700 w-full cursor-pointer focus:outline-none focus:ring-1 focus:ring-blue-500">
+                        <option value="New" {% if stage == 'New' %}selected{% endif %}>New</option>
+                        <option value="Contacted" {% if stage == 'Contacted' %}selected{% endif %}>Contacted</option>
+                        <option value="Qualified" {% if stage == 'Qualified' %}selected{% endif %}>Qualified</option>
+                        <option value="Negotiation" {% if stage == 'Negotiation' %}selected{% endif %}>Negotiation</option>
+                        <option value="Won" {% if stage == 'Won' %}selected{% endif %}>Won</option>
+                        <option value="Lost" {% if stage == 'Lost' %}selected{% endif %}>Lost</option>
+                    </select>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
